@@ -14,8 +14,7 @@ int main(int argc,const char* args[]) {
         game->handleEvents();
         game->update();
         game->render();
-        //per vedere tempo trascorso a fare render e tutto
-        frameTime = SDL_GetTicks() - frameStart;
+        frameTime = SDL_GetTicks() - frameStart;         //per vedere tempo trascorso a fare render e tutto
         if(frameDelay > frameTime) {
             SDL_Delay(frameDelay - frameTime);
         }
