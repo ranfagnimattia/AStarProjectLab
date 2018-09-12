@@ -10,9 +10,6 @@ Enemy::~Enemy() {
 
 }
 
-void Enemy::Update(int x, int y) {
-    GameObject::Update(x, y);
-}
 
 
 

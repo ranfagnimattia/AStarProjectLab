@@ -5,7 +5,7 @@
 #include "GameObject.h"
 #include "TextureManager.h"
 GameObject::GameObject(char* pathSprite,int x,int y,int spd): pathSprite(pathSprite),xpos(x),ypos(y), speed(spd){
-   objTexture= TextureManager::LoadTexture(pathSprite);
+   objTexture = TextureManager::LoadTexture(pathSprite);
 }
 
 void GameObject::Render() {
@@ -44,22 +44,23 @@ void GameObject::setPosition(int x, int y ) {
 }
 bool GameObject::checkCollision(const GameObject *obj, int maxdistance) {
     bool result=false;
-    if(maxdistance >= abs(xpos - obj->getXpos()))
+    if(maxdistance >= abs(xpos - obj->xpos) && maxdistance >= abs(ypos - obj->ypos))
         result = true;
     return result;
 }
 
 GameObject::~GameObject() { }
 
-void GameObject::Update(int x, int y) {
-    srcRect.h = 16;
-    srcRect.w = 16;
-    srcRect.x = 160;
-    srcRect.y = 240;
+void GameObject::Update() {
+    //da togliere
+    srcRect.h = 32;
+    srcRect.w = 32;
+    srcRect.x = 0;
+    srcRect.y = 0;
 
     destRect.h = 32;
     destRect.w = 32;
 
-    destRect.y = xpos *32;
-    destRect.x = ypos *32;
+    destRect.x = xpos *32;
+    destRect.y = ypos *32;
 }

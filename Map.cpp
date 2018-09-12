@@ -3,7 +3,6 @@
 //
 
 #include "Map.h"
-#include "TextureManager.h"
 
 const int Map::width = 20;
 const int Map:: height = 15;
@@ -27,33 +26,41 @@ int Map::lvlmap[300] = {
 };
 
 Map::Map(): textures(TextureManager::LoadTexture("../images/textures.png")) {
-    src.x=0;
-    src.y=0;
+    ground.h = ground.w = grass.h = grass.w = wood.h = wood.w = 16;
 
-    src.w=32;
-    src.h=32;
-    dest.w=32;
-    dest.h=32;
+    wood.x=0;
+    grass.x=32;
+    ground.x=64;
+
+    wood.y=0;
+    grass.y=0;
+    ground.y=0;
+
+    //src.w=32;
+    //src.h=32;
+
+    dest.w = dest.h = 32;
+    dest.x = dest.y = 0;
 }
 void Map::drawMap() {
     int type = 0;
-    for(int row = 0; row < width ; row++) {
-        for(int column=0; column < height ; column++) {
-            type = lvlmap[row * height + column];
+    for(int row = 0; row < height ; row++) {
+        for(int column=0; column < width ; column++) {
+
+            type = lvlmap[row * width + column];
+
             dest.x=column * 32;
-            dest.y=row*32;
+            dest.y=row * 32;
+
             switch(type) {
                 case 0:
-                src.x=32;
-                TextureManager::Draw(textures,src,dest);
+                TextureManager::Draw(textures,grass,dest);
                     break;
                 case 1:
-                src.x=0;
-                TextureManager::Draw(textures,src,dest);
+                TextureManager::Draw(textures,wood,dest);
                     break;
                 case 9:
-                src.x=64;
-                TextureManager::Draw(textures,src,dest);
+                TextureManager::Draw(textures,ground,dest);
                     break;
                 default:
                     break;

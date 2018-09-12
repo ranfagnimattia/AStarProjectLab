@@ -10,7 +10,6 @@ Player::~Player() {
 
 }
 
-void Player::Update(int x, int y) {
-    //GameObject::Update(x, y);
-}
+
+
 

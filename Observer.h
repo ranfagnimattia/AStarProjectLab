@@ -4,10 +4,10 @@
 
 #ifndef ASTARLABSDL_OBSERVER_H
 #define ASTARLABSDL_OBSERVER_H
-#include <list>
+
 class Observer {
 public:
     virtual ~Observer() {}
-    virtual void Update(int x,int y) = 0;
+    virtual void Update() = 0;
 };
 #endif //ASTARLABSDL_OBSERVER_H

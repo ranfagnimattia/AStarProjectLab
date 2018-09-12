@@ -7,14 +7,12 @@
 
 #include <deque>
 #include "GameObject.h"
-#include "Subject.h"
+#include "MapSearchNode.hpp"
 
-class Enemy : public GameObject{
+class Enemy : public GameObject {
 public:
     Enemy(char *pathSprite, int x, int y, int speed);
     virtual ~Enemy();
-
-    virtual void Update(int x,int y) override;
 
     std::deque<MapSearchNode*> directions;
 };

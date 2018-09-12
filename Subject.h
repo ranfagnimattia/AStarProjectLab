@@ -6,7 +6,6 @@
 #define ASTARLABSDL_SUBJECT_H
 
 #include "Observer.h"
-#include "GameObject.h"
 
 class Subject {
 public:

@@ -5,8 +5,7 @@
 #ifndef PROVASDL_GAMEOBJECT_H
 #define PROVASDL_GAMEOBJECT_H
 
-#include "Game.h"
-#include "MapSearchNode.hpp"
+#include <SDL_system.h>
 #include "Observer.h"
 
 class GameObject : public Observer {
@@ -17,7 +16,7 @@ public:
 
     void Render();
 
-    void Update(int x, int y) override;
+    virtual void Update();
 
     //getter and setter
     int getXpos() const;

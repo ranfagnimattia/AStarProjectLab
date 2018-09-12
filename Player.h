@@ -6,15 +6,13 @@
 #define ASTARLABSDL_PLAYER_H
 
 
+#include <SDL_events.h>
 #include "GameObject.h"
 
 class Player : public GameObject {
 public:
     Player(char *pathSprite, int x, int y, int speed);
     virtual ~Player();
-    virtual void Update(int x,int y) override;
-
-
 
 };
 

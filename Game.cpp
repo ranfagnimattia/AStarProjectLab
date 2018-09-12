@@ -3,15 +3,10 @@
 //
 
 #include "Game.h"
-#include "TextureManager.h"
-#include "GameObject.h"
-#include "Map.h"
-#include "Player.h"
-#include "MapSearchNode.hpp"
-#include "Enemy.h"
 
-Map* map = nullptr;
 SDL_Renderer* Game::renderer = nullptr;
+Map* map = nullptr;
+
 Game::Game() {
 
 }
@@ -20,7 +15,6 @@ Game::~Game() {
 }
 
 void Game::init(const char* title,int xpos,int ypos,int width,int height,bool fullscreen) {
-    std::string initimput;
     if(SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         std::cout << "Subsystems Initialized!!"<<std::endl;
         int flags= fullscreen?SDL_WINDOW_FULLSCREEN:0;
@@ -37,43 +31,142 @@ void Game::init(const char* title,int xpos,int ypos,int width,int height,bool fu
 
     }
     map = new Map();
-    //get event to start the game (first step)
-    std::cout << "Press any key and press ENTER to start the game: ";
-    std:: cin >> initimput;
+    player = new Player(const_cast<char *>("../images/sprite1.png"), 19, 0, 1);
+    registerObserver(player);
+
+}
+
+void Game::update() {
+    player->Update();
+    auto gameTimerStart = SDL_GetTicks();
+    int enemiescount = 0;
+
+    if((SDL_GetTicks() - gameTimerStart) >= 30000) {
+        std::cout << "WIN!!!!";
+    }
+    /*else if(((SDL_GetTicks() - gameTimerStart) / 8) >= enemiescount) {
+        enemiescount++;
+        //edit and add factory
+
+
+    }*/
+    auto enemy = new Enemy(const_cast<char *>("../images/demon.png"), 0, 0, 1);
+    enemies.push_back(enemy);
+    registerObserver(enemy);
+    enemy->Update();
+    for(auto enemy : enemies) {
+        if (enemy->directions.empty()) {
+            //do A*
+            // Create an instance of the search class...
+
+            AStarSearch<MapSearchNode> astarsearch;
+
+            unsigned int SearchCount = 0;
+
+            const unsigned int NumSearches = 1;
+
+            while (SearchCount < NumSearches) {
+                // Create a start state
+                MapSearchNode nodeStart;
+                nodeStart.x = enemy->getXpos();
+                nodeStart.y = enemy->getYpos();
+                // Define the goal state
+                MapSearchNode nodeEnd;
+                nodeEnd.x = player->getXpos();
+                nodeEnd.y = player->getYpos();
+                // Set Start and goal states
+                astarsearch.SetStartAndGoalStates(nodeStart, nodeEnd);
+                unsigned int SearchState;
+                unsigned int SearchSteps = 0;
+                do {
+                    SearchState = astarsearch.SearchStep();
+                    SearchSteps++;
+                } while (SearchState == AStarSearch<MapSearchNode>::SEARCH_STATE_SEARCHING);
+
+                if (SearchState == AStarSearch<MapSearchNode>::SEARCH_STATE_SUCCEEDED) {
+                    cout << "Search found goal state\n";
+
+                    MapSearchNode *node = astarsearch.GetSolutionStart();
+                    int steps = 0;
+                    enemy->directions.push_back(node);
+                    node->PrintNodeInfo();
+                    for (;;) {
+                        node = astarsearch.GetSolutionNext();
+                        if (!node) {
+                            break;
+                        }
+                        node->PrintNodeInfo();
+                        enemy->directions.push_back(node);
+                        steps++;
+                    };
+                    cout << "Solution steps " << steps << endl;
+                    // Once you're done with the solution you can free the nodes up
+                    astarsearch.FreeSolutionNodes();
+                } else if (SearchState == AStarSearch<MapSearchNode>::SEARCH_STATE_FAILED) {
+                    cout << "Search terminated. Did not find goal state\n";
+                }
+
+                // Display the number of loops the search went through
+                cout << "SearchSteps : " << SearchSteps << "\n";
+                SearchCount++;
+                astarsearch.EnsureMemoryFreed();
+            }
+        } else {
+            if (enemy->checkCollision(player, 0)) {
+                //end game, LOSE.
+                std::cout << "You lost...";
+                running = false;
+            } else {
+                auto currentPos = enemy->directions.front();
+                enemy->setPosition(currentPos->x, currentPos->y);
+                enemy->directions.pop_front();
+                enemy->Update();
+            }
+        }
+    }
 }
 
 void Game::handleEvents() {
     SDL_Event event;
-    SDL_PollEvent(&event);
-    Player* player = nullptr;
-    if(auto gameobj = dynamic_cast<Player*>(observers.front())) {
-        player=gameobj;
-    }
-    switch(event.type) {
-        case SDL_QUIT:
-            running=false;
-            break;
-        //press arrows->move and notify
-        case SDLK_UP:
-            if(player->getYpos()+1 < Map::height)
-                player->setPosition(player->getXpos(),player->getYpos()+1);
-            break;
-        case SDLK_DOWN:
-            if(player->getYpos()-1 < Map::height)
-                player->setPosition(player->getXpos(),player->getYpos()-1);
-            break;
-        case SDLK_LEFT:
-            if(player->getXpos()-1 < Map::width)
-                player->setPosition(player->getXpos()-1,player->getYpos());
-            break;
-        case SDLK_RIGHT:
-            if(player->getXpos()+1 < Map::width)
-                player->setPosition(player->getXpos()+1,player->getYpos());
-            break;
-        default:
-            break;
+    while(SDL_PollEvent(&event) != 0) {
+        switch(event.type) {
+            case SDL_QUIT:
+                running=false;
+                break;
+                //press arrows->move and notify
+                case SDL_KEYDOWN:
+                    switch(event.key.keysym.sym) {
+                        //press arrows->move and notify
+                        case SDLK_UP:
+                            std::cout << "Pressed UP" << std::endl;
+                            if(player->getYpos()-1 < Map::height)
+                                player->setPosition(player->getXpos(),player->getYpos()-1);
+                            break;
+                        case SDLK_DOWN:
+                            std::cout << "Pressed DOWN" << std::endl;
+                            if(player->getYpos()+1 >= 0)
+                                player->setPosition(player->getXpos(),player->getYpos()+1);
+                            break;
+                        case SDLK_LEFT:
+                            std::cout << "Pressed LEFT" << std::endl;
+                            if(player->getXpos()-1 >= 0)
+                                player->setPosition(player->getXpos()-1,player->getYpos());
+                            break;
+                        case SDLK_RIGHT:
+                            std::cout << "Pressed RIGHT" << std::endl;
+                            if(player->getXpos()+1 < Map::width)
+                                player->setPosition(player->getXpos()+1,player->getYpos());
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+            default:
+                break;
 
+        }
     }
+
 }
 
 void Game::notify() {
@@ -85,10 +178,9 @@ void Game::notify() {
 void Game::render() {
     SDL_RenderClear(renderer);
     map->drawMap();
-    for(auto obs : observers) {
-        if(auto gameobj = dynamic_cast<GameObject*>(obs))
-            gameobj->Render();
-    }
+    player->Render();
+    for(auto enemy : enemies)
+        enemy->Render();
     SDL_RenderPresent(renderer);
 }
 
@@ -109,3 +201,4 @@ void Game::registerObserver(Observer *o) {
 void Game::unregisterObserver(Observer *o) {
     observers.remove(o);
 }
+

@@ -1,17 +1,16 @@
 //
 // Created by matti on 22/04/18.
 //
-
 #ifndef PROVASDL_GAME_H
 #define PROVASDL_GAME_H
-#include<SDL2/SDL.h>
+#include <SDL2/SDL.h>
 #include <SDL_image.h>
-#include<iostream>
-#include "MapSearchNode.hpp"
-#include "stlastar.h"
-#include "Map.h"
-#include "GameObject.h"
+#include <list>
+#include <iostream>
 #include "Subject.h"
+#include "Player.h"
+#include "Map.h"
+#include "Enemy.h"
 
 class Game : public Subject {
 public:
@@ -30,13 +29,16 @@ public:
     bool isRunning();
     void setRunning(bool b) {running = b;}
     void handleEvents();
-    static SDL_Renderer *renderer;
 
+
+    static SDL_Renderer *renderer;
 
 
 private:
     bool running;
     SDL_Window *window;
+    Player* player;
+    std::list<Enemy *> enemies;
     std::list<Observer*> observers;
 
     //int count = 0;
