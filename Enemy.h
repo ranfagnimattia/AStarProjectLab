@@ -5,17 +5,18 @@
 #ifndef ASTARLABSDL_ENEMY_H
 #define ASTARLABSDL_ENEMY_H
 
-
+#include <deque>
 #include "GameObject.h"
+#include "Subject.h"
 
-class Enemy : public GameObject {
+class Enemy : public GameObject{
 public:
-    Enemy(char *pathSprite1, char *pathSprite2, int x, int y, int speed);
-
+    Enemy(char *pathSprite, int x, int y, int speed);
     virtual ~Enemy();
 
-    virtual void Update() override;
+    virtual void Update(int x,int y) override;
 
+    std::deque<MapSearchNode*> directions;
 };
 
 

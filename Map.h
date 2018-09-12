@@ -11,15 +11,16 @@ public:
     Map();
     ~Map();
 
-    void LoadMap(int [20][25]);
-    void DrawMap();
+    void drawMap();
+    static int getMap( int x, int y );
+
+    static const int width;
+    static const int height;
+
 private:
     SDL_Rect src, dest;
     SDL_Texture* textures;
-
-
-    int map[20][25];
-
+    static int lvlmap[300];
 };
 
 

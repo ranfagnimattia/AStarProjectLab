@@ -10,11 +10,11 @@
 
 class Player : public GameObject {
 public:
-    Player(char *pathSprite1, char *pathSprite2, int x, int y, int speed);
-
+    Player(char *pathSprite, int x, int y, int speed);
     virtual ~Player();
+    virtual void Update(int x,int y) override;
 
-    virtual void Update() override;
+
 
 };
 

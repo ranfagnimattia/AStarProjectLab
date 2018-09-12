@@ -7,25 +7,40 @@
 #include<SDL2/SDL.h>
 #include <SDL_image.h>
 #include<iostream>
+#include "MapSearchNode.hpp"
+#include "stlastar.h"
+#include "Map.h"
+#include "GameObject.h"
+#include "Subject.h"
 
-class Game {
+class Game : public Subject {
 public:
     Game();
-    ~Game();
+    virtual ~Game() override;
 
     void init(const char* title,int xpos,int ypos,int width,int height,bool fullscreen);
-    void update();
     void render();
     void clean(); //avoid memory leak and optimize
+    void update();
 
-    bool running();
+    void notify();
+    virtual void registerObserver(Observer *o) override;
+    virtual void unregisterObserver(Observer *o) override;
+
+    bool isRunning();
+    void setRunning(bool b) {running = b;}
     void handleEvents();
     static SDL_Renderer *renderer;
+
+
+
 private:
-    int count = 0;
-    int countmove=0;
-    bool isRunning;
+    bool running;
     SDL_Window *window;
+    std::list<Observer*> observers;
+
+    //int count = 0;
+    //int countmove=0;
 };
 
 

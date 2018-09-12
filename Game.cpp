@@ -7,13 +7,11 @@
 #include "GameObject.h"
 #include "Map.h"
 #include "Player.h"
+#include "MapSearchNode.hpp"
+#include "Enemy.h"
 
-GameObject* player;
-GameObject* enemy;
-Map* map;
+Map* map = nullptr;
 SDL_Renderer* Game::renderer = nullptr;
-
-bool touch;
 Game::Game() {
 
 }
@@ -22,6 +20,7 @@ Game::~Game() {
 }
 
 void Game::init(const char* title,int xpos,int ypos,int width,int height,bool fullscreen) {
+    std::string initimput;
     if(SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         std::cout << "Subsystems Initialized!!"<<std::endl;
         int flags= fullscreen?SDL_WINDOW_FULLSCREEN:0;
@@ -31,23 +30,45 @@ void Game::init(const char* title,int xpos,int ypos,int width,int height,bool fu
             SDL_SetRenderDrawColor(renderer,255,255,255,255);
             std::cout << "Renderer created!" << std::endl;
         }
-        isRunning = true;
+        running = true;
     }
     else {
-        isRunning = false;
+        running = false;
 
     }
-    player = new Player(const_cast<char *>("../images/sprite1.png"), const_cast<char *>("../images/sprite1.png"), 0, 0,1);
-    map= new Map();
-    touch=false;
+    map = new Map();
+    //get event to start the game (first step)
+    std::cout << "Press any key and press ENTER to start the game: ";
+    std:: cin >> initimput;
 }
 
 void Game::handleEvents() {
     SDL_Event event;
     SDL_PollEvent(&event);
+    Player* player = nullptr;
+    if(auto gameobj = dynamic_cast<Player*>(observers.front())) {
+        player=gameobj;
+    }
     switch(event.type) {
         case SDL_QUIT:
-            isRunning=false;
+            running=false;
+            break;
+        //press arrows->move and notify
+        case SDLK_UP:
+            if(player->getYpos()+1 < Map::height)
+                player->setPosition(player->getXpos(),player->getYpos()+1);
+            break;
+        case SDLK_DOWN:
+            if(player->getYpos()-1 < Map::height)
+                player->setPosition(player->getXpos(),player->getYpos()-1);
+            break;
+        case SDLK_LEFT:
+            if(player->getXpos()-1 < Map::width)
+                player->setPosition(player->getXpos()-1,player->getYpos());
+            break;
+        case SDLK_RIGHT:
+            if(player->getXpos()+1 < Map::width)
+                player->setPosition(player->getXpos()+1,player->getYpos());
             break;
         default:
             break;
@@ -55,16 +76,19 @@ void Game::handleEvents() {
     }
 }
 
-void Game::update() {
-    count++;
-    std::cout << count << std::endl;
-    player->Update();
+void Game::notify() {
+    for(auto ob : observers) {
+        //ob->Update();
+    }
 }
 
 void Game::render() {
     SDL_RenderClear(renderer);
-    map->DrawMap();
-    player->Render();
+    map->drawMap();
+    for(auto obs : observers) {
+        if(auto gameobj = dynamic_cast<GameObject*>(obs))
+            gameobj->Render();
+    }
     SDL_RenderPresent(renderer);
 }
 
@@ -75,4 +99,13 @@ void Game::clean() {
     std::cout << "Game cleaned." << std::endl;
 }
 
-bool Game::running() {return isRunning;}
+bool Game::isRunning() {return running;}
+
+
+void Game::registerObserver(Observer *o) {
+    observers.push_back(o);
+}
+
+void Game::unregisterObserver(Observer *o) {
+    observers.remove(o);
+}
