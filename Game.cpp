@@ -33,16 +33,17 @@ void Game::init(const char* title,int xpos,int ypos,int width,int height,bool fu
     map = new Map();
     player = new Player(const_cast<char *>("../images/sprite1.png"), 19, 0, 1);
     registerObserver(player);
-
+    gameTimerStart = SDL_GetTicks();
+    std::cout << "Game started after" << gameTimerStart << "milliseconds" << std::endl;
 }
 
 void Game::update() {
     player->Update();
-    auto gameTimerStart = SDL_GetTicks();
     int enemiescount = 0;
-
+    std::cout << "Time: " << SDL_GetTicks() << std::endl;
     if((SDL_GetTicks() - gameTimerStart) >= 30000) {
         std::cout << "WIN!!!!";
+        running = false;
     }
     /*else if(((SDL_GetTicks() - gameTimerStart) / 8) >= enemiescount) {
         enemiescount++;
@@ -139,22 +140,22 @@ void Game::handleEvents() {
                         //press arrows->move and notify
                         case SDLK_UP:
                             std::cout << "Pressed UP" << std::endl;
-                            if(player->getYpos()-1 < Map::height)
+                            if(Map::getMap(player->getXpos(),player->getYpos()-1) < 9)
                                 player->setPosition(player->getXpos(),player->getYpos()-1);
                             break;
                         case SDLK_DOWN:
                             std::cout << "Pressed DOWN" << std::endl;
-                            if(player->getYpos()+1 >= 0)
+                            if(Map::getMap(player->getXpos(),player->getYpos()+1) < 9)
                                 player->setPosition(player->getXpos(),player->getYpos()+1);
                             break;
                         case SDLK_LEFT:
                             std::cout << "Pressed LEFT" << std::endl;
-                            if(player->getXpos()-1 >= 0)
+                            if(Map::getMap(player->getXpos()-1,player->getYpos()) < 9)
                                 player->setPosition(player->getXpos()-1,player->getYpos());
                             break;
                         case SDLK_RIGHT:
                             std::cout << "Pressed RIGHT" << std::endl;
-                            if(player->getXpos()+1 < Map::width)
+                            if(Map::getMap(player->getXpos()+1,player->getYpos()) < 9)
                                 player->setPosition(player->getXpos()+1,player->getYpos());
                             break;
                         default:

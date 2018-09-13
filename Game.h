@@ -40,7 +40,7 @@ private:
     Player* player;
     std::list<Enemy *> enemies;
     std::list<Observer*> observers;
-
+    int gameTimerStart;
     //int count = 0;
     //int countmove=0;
 };

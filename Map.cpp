@@ -73,7 +73,7 @@ void Map::drawMap() {
 int Map::getMap( int x, int y )
 {
     if( x < 0 || x >= width || y < 0 || y >= height) return 9;
-        return lvlmap[y * height + x];
+        return lvlmap[y * width + x];
 }
 
 Map::~Map() {
