@@ -7,7 +7,7 @@
 
 #include <deque>
 #include "GameObject.h"
-#include "MapSearchNode.hpp"
+#include "MapSearchNode.h"
 
 class Enemy : public GameObject {
 public:

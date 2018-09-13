@@ -1,5 +1,5 @@
-#ifndef MapSearchNode_hpp
-#define MapSearchNode_hpp
+#ifndef MapSearchNode_h
+#define MapSearchNode_h
 #include <iostream>
 #include <stdio.h>
 #include <math.h>

@@ -41,6 +41,7 @@ private:
     std::list<Enemy *> enemies;
     std::list<Observer*> observers;
     int gameTimerStart;
+    int enemiescount;
     //int count = 0;
     //int countmove=0;
 };

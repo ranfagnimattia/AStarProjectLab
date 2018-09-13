@@ -33,29 +33,30 @@ void Game::init(const char* title,int xpos,int ypos,int width,int height,bool fu
     map = new Map();
     player = new Player(const_cast<char *>("../images/sprite1.png"), 19, 0, 1);
     registerObserver(player);
+    auto enemy = new Enemy(const_cast<char *>("../images/demon.png"), 0, 0, 1);
+    enemies.push_back(enemy);
+    registerObserver(enemy);
     gameTimerStart = SDL_GetTicks();
     std::cout << "Game started after" << gameTimerStart << "milliseconds" << std::endl;
+    enemiescount=1;
 }
 
 void Game::update() {
     player->Update();
-    int enemiescount = 0;
     std::cout << "Time: " << SDL_GetTicks() << std::endl;
     if((SDL_GetTicks() - gameTimerStart) >= 30000) {
-        std::cout << "WIN!!!!";
+        std::cout << "WIN!!!!" << std::endl;
         running = false;
     }
-    /*else if(((SDL_GetTicks() - gameTimerStart) / 8) >= enemiescount) {
+    /*else if(((SDL_GetTicks() - gameTimerStart) / 8000) >= enemiescount) {
         enemiescount++;
-        //edit and add factory
-
-
+        auto enemy = new Enemy(const_cast<char *>("../images/demon.png"), 0, 0, 1);
+        enemies.push_back(enemy);
+        registerObserver(enemy);
     }*/
-    auto enemy = new Enemy(const_cast<char *>("../images/demon.png"), 0, 0, 1);
-    enemies.push_back(enemy);
-    registerObserver(enemy);
-    enemy->Update();
+
     for(auto enemy : enemies) {
+        enemy->Update();
         if (enemy->directions.empty()) {
             //do A*
             // Create an instance of the search class...
