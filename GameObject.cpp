@@ -4,6 +4,7 @@
 
 #include "GameObject.h"
 #include "TextureManager.h"
+
 GameObject::GameObject(char* pathSprite,int x,int y,int spd): pathSprite(pathSprite),xpos(x),ypos(y), speed(spd){
    objTexture = TextureManager::LoadTexture(pathSprite);
 }

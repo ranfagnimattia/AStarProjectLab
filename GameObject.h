@@ -6,9 +6,8 @@
 #define PROVASDL_GAMEOBJECT_H
 
 #include <SDL_system.h>
-#include "Observer.h"
 
-class GameObject : public Observer {
+class GameObject{
 
 public:
     GameObject(char * pathSprite,int x=0, int y=0,int speed=1);

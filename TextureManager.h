@@ -4,7 +4,8 @@
 #ifndef PROVASDL_TEXTUREMANAGER_H
 #define PROVASDL_TEXTUREMANAGER_H
 
-#include "Game.h"
+
+#include <SDL_system.h>
 
 class TextureManager {
 public:

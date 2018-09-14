@@ -40,7 +40,7 @@ bool MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapS
        && !((parent_x == x-1) && (parent_y == y))
        )
     {
-        NewNode = MapSearchNode( x-1, y );
+        NewNode = MapSearchNode(x-1, y);
         astarsearch->AddSuccessor( NewNode );
     }
     
@@ -48,7 +48,7 @@ bool MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapS
        && !((parent_x == x) && (parent_y == y-1))
        )
     {
-        NewNode = MapSearchNode( x, y-1 );
+        NewNode = MapSearchNode( x, y-1);
         astarsearch->AddSuccessor( NewNode );
     }
     
@@ -56,7 +56,7 @@ bool MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapS
        && !((parent_x == x+1) && (parent_y == y))
        )
     {
-        NewNode = MapSearchNode( x+1, y );
+        NewNode = MapSearchNode( x+1, y);
         astarsearch->AddSuccessor( NewNode );
     }
     
@@ -65,7 +65,7 @@ bool MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapS
        && !((parent_x == x) && (parent_y == y+1))
        )
     {
-        NewNode = MapSearchNode( x, y+1 );
+        NewNode = MapSearchNode( x, y+1);
         astarsearch->AddSuccessor( NewNode );
     }
     return true;

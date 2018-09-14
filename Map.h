@@ -5,7 +5,9 @@
 #ifndef PROVASDL_MAP_H
 #define PROVASDL_MAP_H
 
-#include "TextureManager.h"
+#include <string>
+#include <SDL_rect.h>
+#include <SDL_render.h>
 
 class Map {
 public:
@@ -19,6 +21,8 @@ public:
     static const int height;
 
 private:
+    bool loadMap(std::string path);
+
     SDL_Rect ground,grass,wood, src, dest;
     SDL_Texture* textures;
     static int lvlmap[300];

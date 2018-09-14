@@ -2,10 +2,13 @@
 // Created by matti on 02/05/18.
 //
 
+#include <string>
+#include <fstream>
 #include "Map.h"
+#include "TextureManager.h"
 
-const int Map::width = 20;
-const int Map:: height = 15;
+const int Map::width= 20;
+const int Map::height = 15;
 int Map::lvlmap[300] = {
 // 0001020304050607080910111213141516171819
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,   // 00
@@ -26,6 +29,9 @@ int Map::lvlmap[300] = {
 };
 
 Map::Map(): textures(TextureManager::LoadTexture("../images/textures.png")) {
+    //lvlmap= new int[width*height];
+
+
     ground.h = ground.w = grass.h = grass.w = wood.h = wood.w = 16;
 
     wood.x=0;
@@ -69,7 +75,6 @@ void Map::drawMap() {
     }
 }
 
-
 int Map::getMap( int x, int y )
 {
     if( x < 0 || x >= width || y < 0 || y >= height) return 9;
@@ -77,4 +82,19 @@ int Map::getMap( int x, int y )
 }
 
 Map::~Map() {
+    //delete[] lvlmap;
+}
+
+bool Map::loadMap(std::string path) {
+    char tile;
+    std::fstream mapFile;
+    mapFile.open(path);
+
+    for(int y=0; y < height; y++) {
+        for(int x=0; x < width; x++) {
+            mapFile.get(tile);
+            lvlmap[y * width + x] = atoi(&tile);
+        }
+    }
+    return false;
 }

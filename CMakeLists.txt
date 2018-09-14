@@ -11,5 +11,5 @@ include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
 include_directories(${SDL2_INCLUDE_DIR})
 set(SDL_LIBRARY_TEMP ${SDL2_LIBRARY})
 
-add_executable(AStarLabSDL main.cpp Game.cpp Game.h TextureManager.h TextureManager.cpp GameObject.cpp GameObject.h Map.cpp Map.h Enemy.cpp Enemy.h Player.cpp Player.h MapSearchNode.h MapSearchNode.cpp fsa.h stlastar.h Observer.h Subject.h)
+add_executable(AStarLabSDL main.cpp Game.cpp Game.h TextureManager.h TextureManager.cpp GameObject.cpp GameObject.h Map.cpp Map.h Enemy.cpp Enemy.h Player.cpp Player.h MapSearchNode.h MapSearchNode.cpp fsa.h stlastar.h Subject.h)
 target_link_libraries(AStarLabSDL ${SDL2_LIBRARY_TEMP} ${SDL2_IMAGE_LIBRARIES})
