@@ -7,9 +7,8 @@
 #include "Map.h"
 #include "TextureManager.h"
 
-const int Map::width= 20;
-const int Map::height = 15;
-int Map::lvlmap[300] = {
+Map* Map::instance = nullptr;
+int mappa[300] = {
 // 0001020304050607080910111213141516171819
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,   // 00
         1,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,1,   // 01
@@ -28,9 +27,9 @@ int Map::lvlmap[300] = {
         1,9,1,1,1,1,9,9,1,9,1,9,1,1,1,1,9,9,1,1,   // 14
 };
 
-Map::Map(): textures(TextureManager::LoadTexture("../images/textures.png")) {
-    //lvlmap= new int[width*height];
-
+Map::Map(int x,int y): width(x),height(y),textures(TextureManager::LoadTexture("../images/textures.png")) {
+    lvlmap= new int[width*height];
+    load();
 
     ground.h = ground.w = grass.h = grass.w = wood.h = wood.w = 16;
 
@@ -82,7 +81,13 @@ int Map::getMap( int x, int y )
 }
 
 Map::~Map() {
-    //delete[] lvlmap;
+    delete[] lvlmap;
+}
+
+Map* Map::Istance(int x,int y) {
+    if(!instance)
+        instance = new Map(x,y);
+    return instance;
 }
 
 bool Map::loadMap(std::string path) {
@@ -97,4 +102,10 @@ bool Map::loadMap(std::string path) {
         }
     }
     return false;
+}
+
+void Map::load() {
+    for(int i=0; i<300; i++) {
+        lvlmap[i]=mappa[i];
+    }
 }

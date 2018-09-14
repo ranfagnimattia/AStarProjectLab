@@ -11,21 +11,26 @@
 
 class Map {
 public:
-    Map();
     ~Map();
 
     void drawMap();
-    static int getMap( int x, int y );
+    int getMap( int x, int y );
+    static Map* Istance(int x=20,int y=15);
 
-    static const int width;
-    static const int height;
+    const int width;
+    const int height;
+
+protected:
+    Map(int x, int y);
 
 private:
+    static Map* instance;
     bool loadMap(std::string path);
+    void load();
 
     SDL_Rect ground,grass,wood, src, dest;
     SDL_Texture* textures;
-    static int lvlmap[300];
+    int* lvlmap;
 };
 
 

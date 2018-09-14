@@ -4,8 +4,7 @@
 
 bool MapSearchNode::IsSameState( MapSearchNode &rhs )
 {
-    if( (x == rhs.x) && (y == rhs.y) ) return true;
-    else return false;
+    return (x == rhs.x) && (y == rhs.y);
 }
 
 void MapSearchNode::PrintNodeInfo()
@@ -20,8 +19,7 @@ float MapSearchNode::GoalDistanceEstimate( MapSearchNode &nodeGoal )
 
 bool MapSearchNode::IsGoal( MapSearchNode &nodeGoal )
 {
-    if( (x == nodeGoal.x) && (y == nodeGoal.y) ) return true;
-    return false;
+    return (x == nodeGoal.x) && (y == nodeGoal.y);
 }
 
 bool MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapSearchNode *parent_node )
@@ -36,7 +34,7 @@ bool MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapS
         parent_y = parent_node->y;
     }
     MapSearchNode NewNode;
-    if( (Map::getMap( x-1, y ) < 9)
+    if( (Map::Istance()->getMap( x-1, y ) < 9)
        && !((parent_x == x-1) && (parent_y == y))
        )
     {
@@ -44,7 +42,7 @@ bool MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapS
         astarsearch->AddSuccessor( NewNode );
     }
     
-    if( (Map::getMap( x, y-1 ) < 9)
+    if( (Map::Istance()->getMap( x, y-1 ) < 9)
        && !((parent_x == x) && (parent_y == y-1))
        )
     {
@@ -52,7 +50,7 @@ bool MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapS
         astarsearch->AddSuccessor( NewNode );
     }
     
-    if( (Map::getMap( x+1, y ) < 9)
+    if( (Map::Istance()->getMap( x+1, y ) < 9)
        && !((parent_x == x+1) && (parent_y == y))
        )
     {
@@ -61,7 +59,7 @@ bool MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapS
     }
     
     
-    if( (Map::getMap( x, y+1 ) < 9)
+    if( (Map::Istance()->getMap( x, y+1 ) < 9)
        && !((parent_x == x) && (parent_y == y+1))
        )
     {
@@ -73,5 +71,5 @@ bool MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapS
 
 float MapSearchNode::GetCost( MapSearchNode &successor )
 {
-    return (float) Map::getMap( x, y );
+    return (float) Map::Istance()->getMap( x, y );
 }

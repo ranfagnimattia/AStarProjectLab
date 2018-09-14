@@ -23,7 +23,7 @@ int main(int argc,const char* args[]) {
 
         if (frameDelay > frameTime) //Se ci metto meno del tempo prestabilito a renderizzare un frame...
         {
-            SDL_Delay(frameDelay - frameTime); //... aggiungo un ritardo in modo che combaci con frameDelay.
+            SDL_Delay(static_cast<Uint32>(frameDelay - frameTime)); //... aggiungo un ritardo in modo che combaci con frameDelay.
         }
     }
 
