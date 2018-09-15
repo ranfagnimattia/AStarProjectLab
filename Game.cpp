@@ -1,7 +1,7 @@
 //
 // Created by matti on 22/04/18.
 //
-
+#include<ctime>
 #include "Game.h"
 
 SDL_Renderer* Game::renderer = nullptr;
@@ -29,7 +29,9 @@ void Game::init(const char* title,int xpos,int ypos,int width,int height,bool fu
         running = false;
 
     }
-    Map::Istance();
+    srand((unsigned)time(NULL));
+    int randnumber = rand() % 3 +1;
+    Map::Istance(20,15,randnumber);
     player = new Player(const_cast<char *>("../images/sprite1.png"), 19, 0, 1);
     auto enemy = new Enemy(const_cast<char *>("../images/demon.png"), 0, 0, 1);
     enemies.push_back(enemy);

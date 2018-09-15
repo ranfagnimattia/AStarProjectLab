@@ -3,38 +3,35 @@
 //
 
 #include <string>
+#include <list>
 #include <fstream>
+#include <iostream>
 #include "Map.h"
 #include "TextureManager.h"
 
 Map* Map::instance = nullptr;
-int mappa[300] = {
-// 0001020304050607080910111213141516171819
-        1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,   // 00
-        1,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,1,   // 01
-        1,9,9,1,1,9,9,9,1,9,1,9,1,9,1,9,9,9,1,1,   // 02
-        1,9,9,1,1,9,9,9,1,9,1,9,1,9,1,9,9,9,1,1,   // 03
-        1,9,1,1,1,1,9,9,1,9,1,9,1,1,1,1,9,9,1,1,   // 04
-        1,9,1,1,9,1,1,1,1,9,1,1,1,1,9,1,1,1,1,1,   // 05
-        1,9,9,9,9,1,1,1,1,1,1,9,9,9,9,1,1,1,1,1,   // 06
-        1,9,9,9,9,9,9,9,9,1,1,1,9,9,9,9,9,9,9,1,   // 07
-        1,9,1,1,1,1,1,1,1,1,1,9,1,1,1,1,1,1,1,1,   // 08
-        1,9,1,9,9,9,9,9,9,9,1,1,9,9,9,9,9,9,9,1,   // 09
-        1,9,1,1,1,1,9,1,1,9,1,1,1,1,1,1,1,1,1,1,   // 10
-        1,9,9,9,9,9,1,9,1,9,1,9,9,9,9,9,1,1,1,1,   // 11
-        1,9,1,9,1,9,9,9,1,9,1,9,1,9,1,9,9,9,1,1,   // 12
-        1,9,1,9,1,9,9,9,1,9,1,9,1,9,1,9,9,9,1,1,   // 13
-        1,9,1,1,1,1,9,9,1,9,1,9,1,1,1,1,9,9,1,1,   // 14
-};
 
-Map::Map(int x,int y): width(x),height(y),textures(TextureManager::LoadTexture("../images/textures.png")) {
+Map::Map(int x,int y, int nummap): width(x),height(y),textures(TextureManager::LoadTexture("../images/textures.png")) {
     lvlmap= new int[width*height];
-    load();
+    switch(nummap) {
+        case 1:
+            loadMap("../maps/map1.map");
+            break;
+        case 2:
+            loadMap("../maps/map2.map");
+            break;
+        case 3:
+            loadMap("../maps/map1.map");
+            break;
+        default:
+            loadMap("../maps/map1.map");
+            break;
+    }
 
     ground.h = ground.w = grass.h = grass.w = wood.h = wood.w = 16;
 
-    wood.x=0;
-    grass.x=32;
+    wood.x=32;
+    grass.x=0;
     ground.x=64;
 
     wood.y=0;
@@ -58,10 +55,10 @@ void Map::drawMap() {
             dest.y=row * 32;
 
             switch(type) {
-                case 0:
+                case 1:
                 TextureManager::Draw(textures,grass,dest);
                     break;
-                case 1:
+                case 2:
                 TextureManager::Draw(textures,wood,dest);
                     break;
                 case 9:
@@ -84,28 +81,25 @@ Map::~Map() {
     delete[] lvlmap;
 }
 
-Map* Map::Istance(int x,int y) {
+Map* Map::Istance(int x,int y, int nmap) {
     if(!instance)
-        instance = new Map(x,y);
+        instance = new Map(x,y, nmap);
     return instance;
 }
 
-bool Map::loadMap(std::string path) {
-    char tile;
-    std::fstream mapFile;
-    mapFile.open(path);
 
-    for(int y=0; y < height; y++) {
-        for(int x=0; x < width; x++) {
-            mapFile.get(tile);
-            lvlmap[y * width + x] = atoi(&tile);
+//UNIT TEST SU GRANDEZZE WIDTH E HEIGHT
+void Map::loadMap(std::string path) {
+    std::ifstream mapFile(path);
+    if(mapFile.is_open()) {
+        int i;
+        int index = 0;
+        while(mapFile >> i ) {
+            lvlmap[index] = i;
+            index++;
         }
+        mapFile.close();
     }
-    return false;
+
 }
 
-void Map::load() {
-    for(int i=0; i<300; i++) {
-        lvlmap[i]=mappa[i];
-    }
-}
