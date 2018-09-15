@@ -11,20 +11,19 @@
 
 Map* Map::instance = nullptr;
 
-Map::Map(int x,int y, int nummap): width(x),height(y),textures(TextureManager::LoadTexture("../images/textures.png")) {
-    lvlmap= new int[width*height];
+Map::Map(int nummap): textures(TextureManager::LoadTexture("../images/textures.png")) {
     switch(nummap) {
         case 1:
-            loadMap("../maps/map1.map");
+            loadMap("../maps/map1.map",height,width);
             break;
         case 2:
-            loadMap("../maps/map2.map");
+            loadMap("../maps/map2.map",height,width);
             break;
         case 3:
-            loadMap("../maps/map1.map");
+            loadMap("../maps/map1.map",height,width);
             break;
         default:
-            loadMap("../maps/map1.map");
+            loadMap("../maps/map1.map",height,width);
             break;
     }
 
@@ -81,25 +80,55 @@ Map::~Map() {
     delete[] lvlmap;
 }
 
-Map* Map::Istance(int x,int y, int nmap) {
+Map* Map::Istance(int nmap) {
     if(!instance)
-        instance = new Map(x,y, nmap);
+        instance = new Map(nmap);
     return instance;
 }
 
 
 //UNIT TEST SU GRANDEZZE WIDTH E HEIGHT
-void Map::loadMap(std::string path) {
+bool Map::loadMap(std::string path, int& height, int& width) {
+    std::string line;
     std::ifstream mapFile(path);
-    if(mapFile.is_open()) {
-        int i;
-        int index = 0;
-        while(mapFile >> i ) {
-            lvlmap[index] = i;
-            index++;
-        }
-        mapFile.close();
-    }
+    std::list<int> arrayUtil;
+    bool successful = false;
 
+    if(mapFile.is_open()) {
+
+        width = 0;
+
+        getline((mapFile),line);
+        char cstr[line.size() +1];
+        strcpy(cstr,line.c_str());
+
+        char * tiles = strtok(cstr," ");
+        while(tiles != NULL) {
+            arrayUtil.push_back(atoi(tiles));
+            tiles = strtok(NULL," ");
+            width++;
+        }
+
+        height = 1;
+
+        while(getline(mapFile,line)) {
+            strcpy(cstr,line.c_str());
+            char * tiles = strtok(cstr," ");
+            while(tiles != NULL) {
+                arrayUtil.push_back(atoi(tiles));
+                tiles = strtok(NULL," ");
+
+            }
+            height++;
+        }
+        successful=true;
+        lvlmap = new int[width * height];
+        int i=0;
+        for(int el : arrayUtil) {
+            lvlmap[i] = el;
+            i++;
+        }
+    }
+    return successful;
 }
 

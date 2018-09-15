@@ -15,17 +15,17 @@ public:
 
     void drawMap();
     int getMap( int x, int y);
-    static Map* Istance(int x=20,int y=15,int nmap=1);
+    static Map* Istance(int nmap=1);
 
-    const int width;
-    const int height;
+    int width;
+    int height;
 
 protected:
-    Map(int x, int y, int nummap);
+    explicit Map(int nummap);
 
 private:
     static Map* instance;
-    void loadMap(std::string path);
+    bool loadMap(std::string path, int& height, int& width);
 
     SDL_Rect ground,grass,wood, src, dest;
     SDL_Texture* textures;

@@ -5,7 +5,6 @@
 #include "Game.h"
 
 SDL_Renderer* Game::renderer = nullptr;
-//Map* map = nullptr;
 Game::Game() {
 
 }
@@ -17,7 +16,7 @@ void Game::init(const char* title,int xpos,int ypos,int width,int height,bool fu
     if(SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         std::cout << "Subsystems Initialized!!"<<std::endl;
         int flags= fullscreen?SDL_WINDOW_FULLSCREEN:0;
-        window=SDL_CreateWindow(title,xpos,ypos,width,height,flags);
+        window=SDL_CreateWindow(title, xpos, ypos, width, height, static_cast<Uint32>(flags));
         renderer = SDL_CreateRenderer(window,-1,0);
         if(renderer) {
             SDL_SetRenderDrawColor(renderer,255,255,255,255);
@@ -31,7 +30,7 @@ void Game::init(const char* title,int xpos,int ypos,int width,int height,bool fu
     }
     srand((unsigned)time(NULL));
     int randnumber = rand() % 3 +1;
-    Map::Istance(20,15,randnumber);
+    Map::Istance(randnumber);
     player = new Player(const_cast<char *>("../images/sprite1.png"), 19, 0, 1);
     auto enemy = new Enemy(const_cast<char *>("../images/demon.png"), 0, 0, 1);
     enemies.push_back(enemy);
@@ -53,7 +52,6 @@ void Game::update() {
         enemies.push_back(enemy);
         registerObserver(enemy);
     }*/
-
     for(auto enemy : enemies) {
         enemy->Update();
         if (enemy->directions.empty()) {
@@ -89,7 +87,6 @@ void Game::update() {
 
                     MapSearchNode *node = astarsearch.GetSolutionStart();
                     int steps = 0;
-                    enemy->directions.push_back(node);
                     node->PrintNodeInfo();
                     for (;;) {
                         node = astarsearch.GetSolutionNext();
@@ -112,7 +109,8 @@ void Game::update() {
                 SearchCount++;
                 astarsearch.EnsureMemoryFreed();
             }
-        } else {
+        }
+        else {
             if (enemy->checkCollision(player, 0)) {
                 //end game, LOSE.
                 std::cout << "You lost...";
