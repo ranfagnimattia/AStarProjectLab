@@ -17,7 +17,7 @@ int main(int argc,const char* args[]) {
         game->update();
         game->handleEvents();
         game->render();
-        SDL_Delay(1000);
+        SDL_Delay(750);
 
         frameTime = SDL_GetTicks() - frameStart; //Calcolo quanti millisecondi impiego a renderizzare un frame
 

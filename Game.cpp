@@ -42,7 +42,7 @@ void Game::init(const char* title,int xpos,int ypos,int width,int height,bool fu
 void Game::update() {
     player->Update();
     std::cout << "Time: " << SDL_GetTicks() << std::endl;
-    if((SDL_GetTicks() - gameTimerStart) >= 30000) {
+    if((SDL_GetTicks() - gameTimerStart) >= 60000) {
         std::cout << "WIN!!!!" << std::endl;
         running = false;
     }
@@ -87,6 +87,7 @@ void Game::update() {
 
                     MapSearchNode *node = astarsearch.GetSolutionStart();
                     int steps = 0;
+                    enemy->directions.push_back(node);
                     node->PrintNodeInfo();
                     for (;;) {
                         node = astarsearch.GetSolutionNext();

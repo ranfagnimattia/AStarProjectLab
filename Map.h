@@ -6,8 +6,8 @@
 #define PROVASDL_MAP_H
 
 #include <string>
-#include <SDL_rect.h>
-#include <SDL_render.h>
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_render.h>
 
 class Map {
 public:
@@ -17,8 +17,14 @@ public:
     int getMap( int x, int y);
     static Map* Istance(int nmap=1);
 
-    int width;
-    int height;
+    const int getWidth() const {
+        return width;
+    }
+
+    const int getHeight() const {
+        return height;
+    }
+
 
 protected:
     explicit Map(int nummap);
@@ -27,6 +33,8 @@ private:
     static Map* instance;
     bool loadMap(std::string path, int& height, int& width);
 
+    int width;
+    int height;
     SDL_Rect ground,grass,wood, src, dest;
     SDL_Texture* textures;
     int* lvlmap;

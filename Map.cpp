@@ -14,16 +14,20 @@ Map* Map::instance = nullptr;
 Map::Map(int nummap): textures(TextureManager::LoadTexture("../images/textures.png")) {
     switch(nummap) {
         case 1:
-            loadMap("../maps/map1.map",height,width);
+            loadMap("/home/matti/Documenti/PROGRAMMAZIONEUNI/AStarLabSDL/maps/map1.map",height,width);
+            //loadMap("../maps/map1.map",height,width);
             break;
         case 2:
-            loadMap("../maps/map2.map",height,width);
+            loadMap("/home/matti/Documenti/PROGRAMMAZIONEUNI/AStarLabSDL/maps/map2.map",height,width);
+            //loadMap("../maps/map2.map",height,width);
             break;
         case 3:
-            loadMap("../maps/map1.map",height,width);
+            loadMap("/home/matti/Documenti/PROGRAMMAZIONEUNI/AStarLabSDL/maps/map1.map",height,width);
+            //loadMap("../maps/map1.map",height,width);
             break;
         default:
-            loadMap("../maps/map1.map",height,width);
+            loadMap("/home/matti/Documenti/PROGRAMMAZIONEUNI/AStarLabSDL/maps/map1.map",height,width);
+            //loadMap("../maps/map1.map",height,width);
             break;
     }
 
@@ -78,6 +82,7 @@ int Map::getMap( int x, int y )
 
 Map::~Map() {
     delete[] lvlmap;
+    instance = nullptr;
 }
 
 Map* Map::Istance(int nmap) {
@@ -87,7 +92,6 @@ Map* Map::Istance(int nmap) {
 }
 
 
-//UNIT TEST SU GRANDEZZE WIDTH E HEIGHT
 bool Map::loadMap(std::string path, int& height, int& width) {
     std::string line;
     std::ifstream mapFile(path);

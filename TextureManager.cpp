@@ -1,7 +1,7 @@
 //
 // Created by matti on 01/05/18.
 //
-#include <SDL_image.h>
+#include <SDL2/SDL_image.h>
 #include "TextureManager.h"
 #include "Game.h"
 
