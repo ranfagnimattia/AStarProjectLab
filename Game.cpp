@@ -5,6 +5,7 @@
 #include "Game.h"
 
 SDL_Renderer* Game::renderer = nullptr;
+
 Game::Game() {
 
 }
@@ -128,42 +129,42 @@ void Game::update() {
 
 void Game::handleEvents() {
     SDL_Event event;
-    while(SDL_PollEvent(&event) != 0) {
+    while(SDL_PollEvent(&event) != 0 ) {
         switch(event.type) {
             case SDL_QUIT:
                 running=false;
                 break;
                 //press arrows->move and notify
                 case SDL_KEYDOWN:
-                    switch(event.key.keysym.sym) {
-                        //press arrows->move and notify
-                        case SDLK_UP:
-                            std::cout << "Pressed UP" << std::endl;
-                            if(Map::Istance()->getMap(player->getXpos(),player->getYpos()-1) < 9)
-                                player->setPosition(player->getXpos(),player->getYpos()-1);
-                            break;
-                        case SDLK_DOWN:
-                            std::cout << "Pressed DOWN" << std::endl;
-                            if(Map::Istance()->getMap(player->getXpos(),player->getYpos()+1) < 9)
-                                player->setPosition(player->getXpos(),player->getYpos()+1);
-                            break;
-                        case SDLK_LEFT:
-                            std::cout << "Pressed LEFT" << std::endl;
-                            if(Map::Istance()->getMap(player->getXpos()-1,player->getYpos()) < 9)
-                                player->setPosition(player->getXpos()-1,player->getYpos());
-                            break;
-                        case SDLK_RIGHT:
-                            std::cout << "Pressed RIGHT" << std::endl;
-                            if(Map::Istance()->getMap(player->getXpos()+1,player->getYpos()) < 9)
-                                player->setPosition(player->getXpos()+1,player->getYpos());
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
+                        switch(event.key.keysym.sym) {
+                            //press arrows->move and notify
+                            case SDLK_UP:
+                                std::cout << "Pressed UP" << std::endl;
+                                if(Map::Istance()->getMap(player->getXpos(),player->getYpos()-1) < 9)
+                                    player->setPosition(player->getXpos(),player->getYpos()-1);
+                                break;
+                            case SDLK_DOWN:
+                                std::cout << "Pressed DOWN" << std::endl;
+                                if(Map::Istance()->getMap(player->getXpos(),player->getYpos()+1) < 9)
+                                    player->setPosition(player->getXpos(),player->getYpos()+1);
+                                break;
+                            case SDLK_LEFT:
+                                std::cout << "Pressed LEFT" << std::endl;
+                                if(Map::Istance()->getMap(player->getXpos()-1,player->getYpos()) < 9)
+                                    player->setPosition(player->getXpos()-1,player->getYpos());
+                                break;
+                            case SDLK_RIGHT:
+                                std::cout << "Pressed RIGHT" << std::endl;
+                                if(Map::Istance()->getMap(player->getXpos()+1,player->getYpos()) < 9)
+                                    player->setPosition(player->getXpos()+1,player->getYpos());
+                                break;
+                            default:
+                                break;
+                        }
+                        SDL_FlushEvent(SDL_KEYDOWN);
+                        break;
             default:
                 break;
-
         }
     }
 

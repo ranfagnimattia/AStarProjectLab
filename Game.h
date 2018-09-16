@@ -27,8 +27,8 @@ public:
     void setRunning(bool b) {running = b;}
     void handleEvents();
 
-
     static SDL_Renderer *renderer;
+
 private:
     bool running;
     SDL_Window *window;
@@ -36,8 +36,6 @@ private:
     std::list<Enemy*> enemies;
     int gameTimerStart;
     int enemiescount;
-    //int count = 0;
-    //int countmove=0;
 };
 
 
