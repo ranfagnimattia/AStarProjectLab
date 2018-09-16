@@ -7,10 +7,17 @@
 SDL_Renderer* Game::renderer = nullptr;
 
 Game::Game() {
-
+    player = nullptr;
+    enemiescount=1;
+    gameTimerStart = 0;
+    running = false;
+    window = nullptr;
 }
 Game::~Game() {
-
+    delete player;
+    for(auto en: enemies)
+        delete en;
+    clean();
 }
 
 void Game::init(const char* title,int xpos,int ypos,int width,int height,bool fullscreen) {
@@ -37,7 +44,6 @@ void Game::init(const char* title,int xpos,int ypos,int width,int height,bool fu
     enemies.push_back(enemy);
     gameTimerStart = SDL_GetTicks();
     std::cout << "Game started after" << gameTimerStart << "milliseconds" << std::endl;
-    enemiescount=1;
 }
 
 void Game::update() {
@@ -169,7 +175,6 @@ void Game::handleEvents() {
     }
 
 }
-
 
 void Game::render() {
     SDL_RenderClear(renderer);

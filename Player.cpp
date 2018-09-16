@@ -7,7 +7,6 @@
 Player::Player(char *pathSprite, int x, int y, int speed) : GameObject(pathSprite, x, y, speed) {}
 
 Player::~Player() {
-
 }
 
 

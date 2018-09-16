@@ -27,6 +27,6 @@ int main(int argc,const char* args[]) {
         }
     }
 
-    game->clean();
+    delete game;
     return 0;
 }

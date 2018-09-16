@@ -14,20 +14,21 @@ Map* Map::instance = nullptr;
 Map::Map(int nummap): textures(TextureManager::LoadTexture("../images/textures.png")) {
     switch(nummap) {
         case 1:
-            loadMap("/home/matti/Documenti/PROGRAMMAZIONEUNI/AStarLabSDL/maps/map1.map",height,width);
-            //loadMap("../maps/map1.map",height,width);
+            //use absolute path for unit testing
+            //loadMap("/home/matti/Documenti/PROGRAMMAZIONEUNI/AStarLabSDL/maps/map1.map",height,width);
+            loadMap("../maps/map1.map",height,width);
             break;
         case 2:
-            loadMap("/home/matti/Documenti/PROGRAMMAZIONEUNI/AStarLabSDL/maps/map2.map",height,width);
-            //loadMap("../maps/map2.map",height,width);
+            //loadMap("/home/matti/Documenti/PROGRAMMAZIONEUNI/AStarLabSDL/maps/map2.map",height,width);
+            loadMap("../maps/map2.map",height,width);
             break;
         case 3:
-            loadMap("/home/matti/Documenti/PROGRAMMAZIONEUNI/AStarLabSDL/maps/map3.map",height,width);
-            //loadMap("../maps/map1.map",height,width);
+            //loadMap("/home/matti/Documenti/PROGRAMMAZIONEUNI/AStarLabSDL/maps/map3.map",height,width);
+            loadMap("../maps/map3.map",height,width);
             break;
         default:
-            loadMap("/home/matti/Documenti/PROGRAMMAZIONEUNI/AStarLabSDL/maps/map3.map",height,width);
-            //loadMap("../maps/map1.map",height,width);
+            //loadMap("/home/matti/Documenti/PROGRAMMAZIONEUNI/AStarLabSDL/maps/map3.map",height,width);
+            loadMap("../maps/map3.map",height,width);
             break;
     }
 
