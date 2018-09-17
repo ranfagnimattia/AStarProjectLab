@@ -17,11 +17,11 @@ public:
     int getMap( int x, int y);
     static Map* Istance(int nmap=1);
 
-    const int getWidth() const {
+    int getWidth() const {
         return width;
     }
 
-    const int getHeight() const {
+    int getHeight() const {
         return height;
     }
 

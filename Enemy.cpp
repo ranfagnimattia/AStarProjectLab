@@ -7,7 +7,7 @@
 Enemy::Enemy(char *pathSprite, int x, int y, int speed) : GameObject(pathSprite, x, y, speed) {}
 
 Enemy::~Enemy() {
-
+    directions.clear();
 }
 
 
