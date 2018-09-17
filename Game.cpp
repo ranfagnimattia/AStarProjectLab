@@ -1,13 +1,14 @@
 //
 // Created by matti on 22/04/18.
 //
-#include<ctime>
+#include <ctime>
 #include "Game.h"
 
 SDL_Renderer* Game::renderer = nullptr;
 
 Game::Game() {
     player = nullptr;
+    enemy = nullptr;
     enemiescount=1;
     gameTimerStart = 0;
     running = false;
@@ -15,8 +16,11 @@ Game::Game() {
 }
 Game::~Game() {
     delete player;
-    for(auto en: enemies)
+    /*
+     * for(auto en: enemies)
         delete en;
+    */
+    delete enemy;
     clean();
 }
 
@@ -39,9 +43,9 @@ void Game::init(const char* title,int xpos,int ypos,int width,int height,bool fu
     srand((unsigned)time(NULL));
     int randnumber = rand() % 3 +1;
     Map::Istance(randnumber);
-    player = new Player(const_cast<char *>("../images/sprite1.png"), 19, 0, 1);
-    auto enemy = new Enemy(const_cast<char *>("../images/demon.png"), 0, 0, 1);
-    enemies.push_back(enemy);
+    player = new GameObject(const_cast<char *>("../images/sprite1.png"), 19, 0, 1);
+    enemy = new Enemy(const_cast<char *>("../images/demon.png"), 0, 0, 1);
+    //enemies.push_back(enemy);
     gameTimerStart = SDL_GetTicks();
     std::cout << "Game started after" << gameTimerStart << "milliseconds" << std::endl;
 }
@@ -59,78 +63,79 @@ void Game::update() {
         enemies.push_back(enemy);
         registerObserver(enemy);
     }*/
-    for(auto enemy : enemies) {
-        enemy->Update();
-        if (enemy->directions.empty()) {
-            //do A*
-            // Create an instance of the search class...
 
-            AStarSearch<MapSearchNode> astarsearch;
+    //for(auto enemy : enemies) {
+    enemy->Update();
+    if (enemy->directions.empty()) {
+        //do A*
+        // Create an instance of the search class...
 
-            unsigned int SearchCount = 0;
+        AStarSearch<MapSearchNode> astarsearch;
 
-            const unsigned int NumSearches = 1;
+        unsigned int SearchCount = 0;
 
-            while (SearchCount < NumSearches) {
-                // Create a start state
-                MapSearchNode nodeStart;
-                nodeStart.x = enemy->getXpos();
-                nodeStart.y = enemy->getYpos();
-                // Define the goal state
-                MapSearchNode nodeEnd;
-                nodeEnd.x = player->getXpos();
-                nodeEnd.y = player->getYpos();
-                // Set Start and goal states
-                astarsearch.SetStartAndGoalStates(nodeStart, nodeEnd);
-                unsigned int SearchState;
-                unsigned int SearchSteps = 0;
-                do {
-                    SearchState = astarsearch.SearchStep();
-                    SearchSteps++;
-                } while (SearchState == AStarSearch<MapSearchNode>::SEARCH_STATE_SEARCHING);
+        const unsigned int NumSearches = 1;
 
-                if (SearchState == AStarSearch<MapSearchNode>::SEARCH_STATE_SUCCEEDED) {
-                    cout << "Search found goal state\n";
+        while (SearchCount < NumSearches) {
+            // Create a start state
+            MapSearchNode nodeStart;
+            nodeStart.x = enemy->getXpos();
+            nodeStart.y = enemy->getYpos();
+            // Define the goal state
+            MapSearchNode nodeEnd;
+            nodeEnd.x = player->getXpos();
+            nodeEnd.y = player->getYpos();
+            // Set Start and goal states
+            astarsearch.SetStartAndGoalStates(nodeStart, nodeEnd);
+            unsigned int SearchState;
+            unsigned int SearchSteps = 0;
+            do {
+                SearchState = astarsearch.SearchStep();
+                SearchSteps++;
+            } while (SearchState == AStarSearch<MapSearchNode>::SEARCH_STATE_SEARCHING);
 
-                    MapSearchNode *node = astarsearch.GetSolutionStart();
-                    int steps = 0;
-                    enemy->directions.push_back(node);
+            if (SearchState == AStarSearch<MapSearchNode>::SEARCH_STATE_SUCCEEDED) {
+                cout << "Search found goal state\n";
+
+                MapSearchNode *node = astarsearch.GetSolutionStart();
+                int steps = 0;
+                enemy->directions.push_back(node);
+                node->PrintNodeInfo();
+                for (;;) {
+                    node = astarsearch.GetSolutionNext();
+                    if (!node) {
+                        break;
+                    }
                     node->PrintNodeInfo();
-                    for (;;) {
-                        node = astarsearch.GetSolutionNext();
-                        if (!node) {
-                            break;
-                        }
-                        node->PrintNodeInfo();
-                        enemy->directions.push_back(node);
-                        steps++;
-                    };
-                    cout << "Solution steps " << steps << endl;
-                    // Once you're done with the solution you can free the nodes up
-                    astarsearch.FreeSolutionNodes();
-                } else if (SearchState == AStarSearch<MapSearchNode>::SEARCH_STATE_FAILED) {
-                    cout << "Search terminated. Did not find goal state\n";
-                }
+                    enemy->directions.push_back(node);
+                    steps++;
+                };
+                cout << "Solution steps " << steps << endl;
+                // Once you're done with the solution you can free the nodes up
+                astarsearch.FreeSolutionNodes();
+            } else if (SearchState == AStarSearch<MapSearchNode>::SEARCH_STATE_FAILED) {
+                cout << "Search terminated. Did not find goal state\n";
+            }
 
-                // Display the number of loops the search went through
-                cout << "SearchSteps : " << SearchSteps << "\n";
-                SearchCount++;
-                astarsearch.EnsureMemoryFreed();
-            }
-        }
-        else {
-            if (enemy->checkCollision(player, 0)) {
-                //end game, LOSE.
-                std::cout << "You lost...";
-                running = false;
-            } else {
-                auto currentPos = enemy->directions.front();
-                enemy->setPosition(currentPos->x, currentPos->y);
-                enemy->directions.pop_front();
-                enemy->Update();
-            }
+            // Display the number of loops the search went through
+            cout << "SearchSteps : " << SearchSteps << "\n";
+            SearchCount++;
+            astarsearch.EnsureMemoryFreed();
         }
     }
+    else {
+        if (enemy->checkCollision(player, 0)) {
+            //end game, LOSE.
+            std::cout << "You lost...";
+            running = false;
+        } else {
+            auto currentPos = enemy->directions.front();
+            enemy->setPosition(currentPos->x, currentPos->y);
+            enemy->directions.pop_front();
+            enemy->Update();
+        }
+    }
+    //}
 }
 
 void Game::handleEvents() {
@@ -180,8 +185,8 @@ void Game::render() {
     SDL_RenderClear(renderer);
     Map::Istance()->drawMap();
     player->Render();
-    for(auto enemy : enemies)
-        enemy->Render();
+    //for(auto enemy : enemies)
+    enemy->Render();
     SDL_RenderPresent(renderer);
 }
 

@@ -11,7 +11,7 @@ class GameObject{
 
 public:
     GameObject(char * pathSprite,int x=0, int y=0,int speed=1);
-    virtual ~GameObject() = 0;
+    virtual ~GameObject();
 
     void Render();
 
@@ -35,10 +35,6 @@ protected:
     char* pathSprite;
     SDL_Texture* objTexture;
     SDL_Rect srcRect,destRect;
-
-
-
-
 };
 
 

@@ -8,7 +8,6 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "Player.h"
 #include "Enemy.h"
 #include "Map.h"
 
@@ -32,8 +31,9 @@ public:
 private:
     bool running;
     SDL_Window *window;
-    Player* player;
-    std::list<Enemy*> enemies;
+    GameObject* player;
+    //std::list<Enemy*> enemies;
+    Enemy* enemy;
     int gameTimerStart;
     int enemiescount;
 };
